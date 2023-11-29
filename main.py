@@ -30,7 +30,7 @@ class TextEmbedding:
         keyword = keyword.lower()
         print("Finding similarities to keyword string: " + keyword)
         print("Exact matches:")
-        contains_keyword = self.courses_df[self.courses_df["title"].str.lower().str.contains(keyword)]
+        contains_keyword = self.courses_df[self.courses_df["title"].str.lower().fillna("").str.contains(keyword)]
         print(contains_keyword[["Course Code", "title", "desc"]].head(10))
 
         print("---------------------------------------------------------------")
@@ -51,7 +51,7 @@ class TextEmbedding:
 
 if __name__ == "__main__":
     spacy_model = "en_core_web_md"
-    courses_csv = "cs_courses_preprocessed.csv"
+    courses_csv = "combined_courses_preprocessed.csv"
     with_preprocessing = True
     textEmbedding = TextEmbedding(spacy_model, courses_csv)
 
