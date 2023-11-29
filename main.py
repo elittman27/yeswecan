@@ -48,8 +48,8 @@ class TextEmbedding:
 
 if __name__ == "__main__":
     spacy_model = "en_core_web_md"
-    courses_csv = "cs_courses.csv"
-    with_preprocessing = False
+    courses_csv = "cs_courses_preprocessed.csv"
+    with_preprocessing = True
     textEmbedding = TextEmbedding(spacy_model, courses_csv)
 
     while True:
