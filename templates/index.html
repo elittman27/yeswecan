@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cal Class Recommender</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> <!-- Link to a CSS file for styling -->
+</head>
+<body>
+    <h1>Cal Class Recommender</h1>
+    <h2>What do you want to learn about?</h2>
+    <form action="/process_data" method="post">
+        <input type="text" name="userInput" placeholder="Enter Description">
+        <button type="submit" id="submitButton">Find Classes</button>
+    </form>
+    <p id="response"></p>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            fetch('/process_data', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('response').innerText = data;
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

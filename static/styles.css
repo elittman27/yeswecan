@@ -1,0 +1,50 @@
+/* UC Berkeley-themed button styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f3f3f3; /* UC Berkeley's official background color */
+}
+
+form {
+    text-align: center;
+    margin-top: 100px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 50px;
+    color: #000080;
+}
+
+h2 {
+    text-align: center;
+    color: #000080;
+}
+
+p {
+    text-align: center;
+}
+
+input[type="text"] {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+}
+
+#submitButton {
+    padding: 12px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #f0c518; /* UC Berkeley's official blue color */
+    color: #003262;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#submitButton:hover {
+    background-color: #0056b3; /* UC Berkeley's hover blue color */
+}

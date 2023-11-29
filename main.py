@@ -42,6 +42,9 @@ class TextEmbedding:
         self.courses_df["similarity"] = self.title_weight * self.courses_df["titleXkeyword"] + self.desc_weight * self.courses_df["titleXdesc"]
         self.courses_df = self.courses_df.sort_values(by="similarity", ascending=False)
         print(self.courses_df[["Course Code", "title", "desc", "similarity"]].head(10))
+        
+        # Return relevant matches
+        return self.courses_df[["Course Code", "title", "desc", "similarity"]].head(10)
 
     def two_keyword_similarity(self, keyword1, keyword2):
         return self.nlp_model(keyword1).similarity(self.nlp_model(keyword2))
