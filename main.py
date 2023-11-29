@@ -10,8 +10,8 @@ class TextEmbedding:
         self.preprocessor = TextPreprocessor()
         self.title_weight = .75
         self.desc_weight = .25
-        self.courses_df["title"] = self.courses_df["Course Title"]
-        self.courses_df["desc"] = self.courses_df["Description"]
+        self.courses_df["title"] = self.courses_df["Course Title Preprocessed"]
+        self.courses_df["desc"] = self.courses_df["Description Preprocessed"]
         t0 = time.time()
         self.courses_df["nlp_title"] = self.courses_df["title"].apply(lambda title: self.nlp_model(str(title).lower()))
         t1 = time.time()
@@ -41,10 +41,10 @@ class TextEmbedding:
         self.courses_df["titleXdesc"] = self.courses_df["nlp_desc"].apply(lambda nlp_v: nlp_v.similarity(nlp_keyword))
         self.courses_df["similarity"] = self.title_weight * self.courses_df["titleXkeyword"] + self.desc_weight * self.courses_df["titleXdesc"]
         self.courses_df = self.courses_df.sort_values(by="similarity", ascending=False)
-        print(self.courses_df[["Course Code", "title", "desc", "similarity"]].head(10))
+        print(self.courses_df[["Course Code", "Course Title", "Description", "similarity"]].head(10))
         
         # Return relevant matches
-        return self.courses_df[["Course Code", "title", "desc", "similarity"]].head(10)
+        return self.courses_df[["Course Code", "Course Title", "Description", "similarity"]].head(10)
 
     def two_keyword_similarity(self, keyword1, keyword2):
         return self.nlp_model(keyword1).similarity(self.nlp_model(keyword2))
