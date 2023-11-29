@@ -3,15 +3,6 @@ import pandas as pd
 import time
 from course_data.preprocessor import TextPreprocessor
 
-# nlp = spacy.load('en_core_web_lg')
-# classes =  ["architecture", "security", "AI", "ML", "algorithms", "data science", "databases", "graphics", "operating systems"]
-# nlp_classes = [nlp(c) for c in classes]
-# nlp_keyword = nlp("design")
-
-# for c in nlp_classes:
-#     similarity = nlp_keyword.similarity(c)
-#     print("Similarity between %s and %s is %.4f" % (nlp_keyword, c, similarity))
-
 class TextEmbedding:
     def __init__(self, spacy_model, courses_csv):
         self.nlp_model = spacy.load(spacy_model)
@@ -33,7 +24,7 @@ class TextEmbedding:
         """ Given a keyword string, return the list of most relevant course titles"""
         # Start by processing the input word
         if with_preprocessing:
-            processed_text = self.preprocessor.preprocess(keyword)
+            keyword = self.preprocessor.preprocess(keyword)
 
         print("Finding similarities to keyword string: " + keyword)
         t = time.time()
@@ -45,13 +36,15 @@ class TextEmbedding:
         print(self.courses_df[["Course Code", "title", "desc", "similarity"]].head(25))
         print("Time to find similarity between %s and catalog: %.4f" % (keyword, time.time() - t))
 
-spacy_model = "en_core_web_lg"
-courses_csv = "cs_courses.csv"
-textEmbedding = TextEmbedding(spacy_model, courses_csv)
-while True:
-    keyword = input("Give me a keyword: ")
-    textEmbedding.get_similar_course_titles(keyword, with_preprocessing=True)
+if __name__ == "__main__":
+    spacy_model = "en_core_web_lg"
+    courses_csv = "cs_courses.csv"
+    with_preprocessing = True
+    textEmbedding = TextEmbedding(spacy_model, courses_csv)
+    while True:
+        keyword = input("Give me a keyword: ")
+        textEmbedding.get_similar_course_titles(keyword, with_preprocessing)
 
-# keywords = ["vision", "neural networks", "probability", "systems", "SQL"]
-# for keyword in keywords:
-#     textEmbedding.get_similar_course_titles(keyword)
+    # keywords = ["vision", "neural networks", "probability", "systems", "SQL"]
+    # for keyword in keywords:
+    #     textEmbedding.get_similar_course_titles(keyword)
