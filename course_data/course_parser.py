@@ -3,6 +3,7 @@ import pandas as pd
 import re
 import os
 import glob
+from preprocessor import TextPreprocessor
 
 # HOW TO USE:
 # 1. Go to https://guide.berkeley.edu/courses/
@@ -51,24 +52,19 @@ def parse_courses_from_html(file_path):
             'Description': description.strip()
         })
     courses_df = pd.DataFrame(courses)
-    print(courses_df.head())
     return courses_df
 
 # Specify the directory containing your files
 directory_path = r'course_data/department_htmls'  # Use a raw string literal and forward slashes
 
-# Check if the directory exists
 if not os.path.exists(directory_path):
     print(f"Directory does not exist: {directory_path}")
     exit()
 
-# Print the current working directory for debugging
 print(f"Current working directory: {os.getcwd()}")
 
-# Use glob to find all files in the directory
 file_paths = glob.glob(os.path.join(directory_path, '*'))
 
-# Check if file_paths is empty
 if not file_paths:
     print("No files found in the directory.")
     exit()
@@ -81,3 +77,9 @@ for path in file_paths:
 
 # Export to CSV
 all_courses.to_csv('combined_courses.csv', index=False)
+
+all_courses_preprocessed = all_courses.copy()
+tp = TextPreprocessor()
+all_courses_preprocessed['Description'] = all_courses_preprocessed['Description'].apply(tp.preprocess)
+
+all_courses_preprocessed.to_csv('combined_courses_preprocessed.csv', index=False)
