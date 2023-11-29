@@ -1,11 +1,19 @@
 from bs4 import BeautifulSoup
 import pandas as pd
 import re
+import os
+import glob
+
+# HOW TO USE:
+# 1. Go to https://guide.berkeley.edu/courses/
+# 2. Select the department you want to parse
+# 3. Copy HTML
+# 4. Paste HTML into a text file and save it in the raw_data folder
+# 5. Run the script
+
 
 def clean_text(text):
-    # Replace non-breaking spaces and other special characters
     text = text.replace(u'\xa0', u' ').replace(u'聽', ' ').replace(u'鈥', '')
-    # Further cleaning with regular expressions if necessary
     text = re.sub(r'[^\x00-\x7F]+', ' ', text)  # Remove non-ASCII characters
     return text.strip()
 
@@ -24,8 +32,8 @@ def parse_courses_from_html(file_path):
         desc_block = course_block.find('p', class_='courseblockdesc')
         if desc_block:
             terms_offered, description = desc_block.get_text(separator='|').split('|', 1)
-            terms_offered = terms_offered.strip()  # Trim spaces
-            description = description.strip().split('|')[0].strip()  # Trim spaces and remove text after "|"
+            terms_offered = terms_offered.strip()
+            description = description.strip().split('|')[0].strip()
         else:
             terms_offered, description = 'Not specified', 'Not specified'
 
@@ -34,7 +42,7 @@ def parse_courses_from_html(file_path):
         course_units = clean_text(course_units)
         terms_offered = clean_text(terms_offered)
         description = clean_text(description)
-        
+
         courses.append({
             'Course Code': course_code,
             'Course Title': course_title,
@@ -46,9 +54,24 @@ def parse_courses_from_html(file_path):
     print(courses_df.head())
     return courses_df
 
+# Specify the directory containing your files
+directory_path = r'course_data/raw_data'  # Use a raw string literal and forward slashes
 
-file_paths = ['course_data\cs_courses_html.txt', 
-              'course_data\ee_courses_html.txt']
+# Check if the directory exists
+if not os.path.exists(directory_path):
+    print(f"Directory does not exist: {directory_path}")
+    exit()
+
+# Print the current working directory for debugging
+print(f"Current working directory: {os.getcwd()}")
+
+# Use glob to find all files in the directory
+file_paths = glob.glob(os.path.join(directory_path, '*'))
+
+# Check if file_paths is empty
+if not file_paths:
+    print("No files found in the directory.")
+    exit()
 
 # Parsing and combining course data from all files
 all_courses = pd.DataFrame()
