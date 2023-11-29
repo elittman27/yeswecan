@@ -13,7 +13,12 @@ class TextPreprocessor:
         self.lemmatizer = WordNetLemmatizer()
         self.stop_words = set(stopwords.words('english'))
 
-        custom_stop_words = ['This', 'Introduction', 'These', 'Topic', 'Department', 'How', 'The', 'Course']
+        custom_stop_words = ['This', 'this', 'Introduction', 'introduction', 'These', 'these',
+                             'Topic', 'topic', 'Department', 'department',
+                             'How', 'how', 'The', 'the', 'Course', 'course',
+                             'Students', 'students', 'student', 'Student', 'Including', 'including', 
+                             'Faculty', 'faculty', 'Instructor', 'instructor', 'Instructors', 'instructors', 
+                             'A', 'We', 'It', 'In', 'also', 'use', 'An', 'Topics']
         self.stop_words.update(custom_stop_words)
 
     def preprocess(self, text):
@@ -27,6 +32,6 @@ class TextPreprocessor:
 # Example usage
 if __name__ == "__main__":
     preprocessor = TextPreprocessor()
-    example_text = "This is an example sentence demonstrating text preprocessing."
+    example_text = "This is an example sentence demonstrating text preprocessing course."
     processed_text = preprocessor.preprocess(example_text)
     print(processed_text)

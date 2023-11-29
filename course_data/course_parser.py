@@ -85,8 +85,8 @@ def generate_processed_csv(input_csv_path, output_csv_path):
     df = pd.read_csv(input_csv_path)
     df_preprocessed = df.copy()
     tp = TextPreprocessor()
-    df_preprocessed['Course Title'] = df_preprocessed['Course Title'].apply(tp.preprocess)
-    df_preprocessed['Description'] = df_preprocessed['Description'].apply(tp.preprocess)
+    df_preprocessed['Course Title Preprocessed'] = df_preprocessed['Course Title'].apply(tp.preprocess)
+    df_preprocessed['Description Preprocessed'] = df_preprocessed['Description'].apply(tp.preprocess)
     df_preprocessed.to_csv(output_csv_path, index=False)
 
 generate_processed_csv('combined_courses.csv', 'combined_courses_preprocessed.csv')
