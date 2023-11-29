@@ -80,6 +80,15 @@ all_courses.to_csv('combined_courses.csv', index=False)
 
 all_courses_preprocessed = all_courses.copy()
 tp = TextPreprocessor()
+all_courses_preprocessed['Course Title'] = all_courses_preprocessed['Course Title'].apply(tp.preprocess)
 all_courses_preprocessed['Description'] = all_courses_preprocessed['Description'].apply(tp.preprocess)
-
 all_courses_preprocessed.to_csv('combined_courses_preprocessed.csv', index=False)
+
+
+# Process cs_courses.csv only
+cs_courses = pd.read_csv('cs_courses.csv')
+cs_courses_preprocessed = cs_courses.copy()
+tp = TextPreprocessor()
+cs_courses_preprocessed['Course Title'] = cs_courses_preprocessed['Course Title'].apply(tp.preprocess)
+cs_courses_preprocessed['Description'] = cs_courses_preprocessed['Description'].apply(tp.preprocess)
+cs_courses_preprocessed.to_csv('cs_courses_preprocessed.csv', index=False)
