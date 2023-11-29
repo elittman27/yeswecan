@@ -4,9 +4,9 @@ from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 
 # Ensure the necessary NLTK components are downloaded
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('wordnet')
+nltk.download('punkt', quiet=True)
+nltk.download('stopwords', quiet=True)
+nltk.download('wordnet', quiet=True)
 
 class TextPreprocessor:
     def __init__(self):
