@@ -19,7 +19,8 @@ class TextPreprocessor:
         return ' '.join(tokens)
 
 # Example usage
-preprocessor = TextPreprocessor()
-example_text = "This is an example sentence demonstrating text preprocessing."
-processed_text = preprocessor.preprocess(example_text)
-print(processed_text)
+if __name__ == "__main__":
+    preprocessor = TextPreprocessor()
+    example_text = "This is an example sentence demonstrating text preprocessing."
+    processed_text = preprocessor.preprocess(example_text)
+    print(processed_text)
