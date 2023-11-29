@@ -54,41 +54,40 @@ def parse_courses_from_html(file_path):
     courses_df = pd.DataFrame(courses)
     return courses_df
 
-# Specify the directory containing your files
-directory_path = r'course_data/department_htmls'  # Use a raw string literal and forward slashes
 
-if not os.path.exists(directory_path):
-    print(f"Directory does not exist: {directory_path}")
-    exit()
+def generate_all_courses_csv():
 
-print(f"Current working directory: {os.getcwd()}")
+    # Specify the directory containing your files
+    directory_path = r'course_data/department_htmls'  # Use a raw string literal and forward slashes
 
-file_paths = glob.glob(os.path.join(directory_path, '*'))
+    if not os.path.exists(directory_path):
+        print(f"Directory does not exist: {directory_path}")
+        exit()
 
-if not file_paths:
-    print("No files found in the directory.")
-    exit()
+    print(f"Current working directory: {os.getcwd()}")
 
-# Parsing and combining course data from all files
-all_courses = pd.DataFrame()
-for path in file_paths:
-    courses_df = parse_courses_from_html(path)
-    all_courses = pd.concat([all_courses, courses_df], ignore_index=True)
+    file_paths = glob.glob(os.path.join(directory_path, '*'))
 
-# Export to CSV
-all_courses.to_csv('combined_courses.csv', index=False)
+    if not file_paths:
+        print("No files found in the directory.")
+        exit()
 
-all_courses_preprocessed = all_courses.copy()
-tp = TextPreprocessor()
-all_courses_preprocessed['Course Title'] = all_courses_preprocessed['Course Title'].apply(tp.preprocess)
-all_courses_preprocessed['Description'] = all_courses_preprocessed['Description'].apply(tp.preprocess)
-all_courses_preprocessed.to_csv('combined_courses_preprocessed.csv', index=False)
+    # Parsing and combining course data from all files
+    all_courses = pd.DataFrame()
+    for path in file_paths:
+        courses_df = parse_courses_from_html(path)
+        all_courses = pd.concat([all_courses, courses_df], ignore_index=True)
 
+    # Export to CSV
+    all_courses.to_csv('combined_courses.csv', index=False)
 
-# Process cs_courses.csv only
-cs_courses = pd.read_csv('cs_courses.csv')
-cs_courses_preprocessed = cs_courses.copy()
-tp = TextPreprocessor()
-cs_courses_preprocessed['Course Title'] = cs_courses_preprocessed['Course Title'].apply(tp.preprocess)
-cs_courses_preprocessed['Description'] = cs_courses_preprocessed['Description'].apply(tp.preprocess)
-cs_courses_preprocessed.to_csv('cs_courses_preprocessed.csv', index=False)
+def generate_processed_csv(input_csv_path, output_csv_path):
+    df = pd.read_csv(input_csv_path)
+    df_preprocessed = df.copy()
+    tp = TextPreprocessor()
+    df_preprocessed['Course Title'] = df_preprocessed['Course Title'].apply(tp.preprocess)
+    df_preprocessed['Description'] = df_preprocessed['Description'].apply(tp.preprocess)
+    df_preprocessed.to_csv(output_csv_path, index=False)
+
+generate_processed_csv('combined_courses.csv', 'combined_courses_preprocessed.csv')
+generate_processed_csv('cs_courses.csv', 'cs_courses_preprocessed.csv')
