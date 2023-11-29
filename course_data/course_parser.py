@@ -55,7 +55,7 @@ def parse_courses_from_html(file_path):
     return courses_df
 
 # Specify the directory containing your files
-directory_path = r'course_data/raw_data'  # Use a raw string literal and forward slashes
+directory_path = r'course_data/department_htmls'  # Use a raw string literal and forward slashes
 
 # Check if the directory exists
 if not os.path.exists(directory_path):
