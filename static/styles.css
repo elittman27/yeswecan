@@ -48,3 +48,28 @@ input[type="text"] {
 #submitButton:hover {
     background-color: #0056b3; /* UC Berkeley's hover blue color */
 }
+
+table {
+    width: 80%; /* Set the width of the table */
+    margin: 20px auto; /* Center the table and add margin */
+    border-collapse: collapse; /* Remove space between table borders */
+}
+
+th, td {
+    border: 1px solid #ddd; /* Add a border to each cell */
+    padding: 8px; /* Add padding inside each cell */
+    text-align: left; /* Align text to the left */
+}
+
+th {
+    background-color: #f4f4f4; /* Set a background color for headers */
+    color: #333; /* Set text color for headers */
+}
+
+tr:nth-child(even) {
+    background-color: #c8c8c8; /* Set a background color for even rows */
+}
+
+tr:hover {
+    background-color: #f0c518; /* Add a hover effect for rows */
+}

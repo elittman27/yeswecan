@@ -55,20 +55,32 @@ class TextEmbedding:
         self.courses_df["titleXkeyword"] = self.courses_df["nlp_title"].apply(lambda nlp_v: nlp_v.similarity(nlp_keyword))
         self.courses_df["titleXdesc"] = self.courses_df["nlp_desc"].apply(lambda nlp_v: nlp_v.similarity(nlp_keyword))
         self.courses_df["similarity"] = self.title_weight * self.courses_df["titleXkeyword"] + self.desc_weight * self.courses_df["titleXdesc"]
-        self.courses_df = self.courses_df.sort_values(by="similarity", ascending=False)
-        print(self.courses_df[["Course Code", "Course Title", "Description", "similarity"]].head(10))
+        self.courses_df = self.courses_df.sort_values(by="similarity", ascending=False).head(10)
         
-        # Return relevant matches
-        return self.courses_df[["Course Code", "Course Title", "Description", "similarity"]].head(10)
+        courses_list = self.courses_df.to_dict(orient='records')
+        formatted_courses = []
+        for course in courses_list:
+            formatted_course = {
+                "course_code": course["Course Code"],
+                "title": course["Course Title"],
+                "description": course["Description"],
+                "similarity": course["similarity"]
+            }
+            formatted_courses.append(formatted_course)
+
+        print(formatted_courses)
+        return formatted_courses
 
     def two_keyword_similarity(self, keyword1, keyword2):
         return self.nlp_model(keyword1).similarity(self.nlp_model(keyword2))
 
 if __name__ == "__main__":
     spacy_model = "en_core_web_lg"
-    courses_csv = "combined_courses_preprocessed.csv"
+    courses_csv = "cs_courses_preprocessed.csv"
     with_preprocessing = True
-    textEmbedding = TextEmbedding(spacy_model, courses_csv)
+    load_embeddings = False
+    save_embeddings = False
+    textEmbedding = TextEmbedding(spacy_model, courses_csv, load_embeddings=load_embeddings, save_embeddings=save_embeddings)
 
     while True:
         keyword = input("Give me a keyword: ")

@@ -17,17 +17,37 @@
         document.querySelector('form').addEventListener('submit', function(e) {
             e.preventDefault();
             const formData = new FormData(this);
-
+    
             fetch('/process_data', {
                 method: 'POST',
                 body: formData
             })
-            .then(response => response.text())
+            .then(response => response.json()) // Parse the JSON data
             .then(data => {
-                document.getElementById('response').innerText = data;
+                let table = `<table>
+                                <tr>
+                                    <th>Course Code</th>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Similarity</th>
+                                </tr>`;
+    
+                data.forEach(item => {
+                    table += `<tr>
+                                <td>${item.course_code}</td>
+                                <td>${item.title}</td>
+                                <td>${item.description}</td>
+                                <td>${parseFloat(item.similarity).toFixed(2)}</td>
+                              </tr>`;
+                });
+    
+                table += `</table>`;
+                document.getElementById('response').innerHTML = table;
             })
             .catch(error => console.error('Error:', error));
         });
     </script>
+    
+    
 </body>
 </html>
