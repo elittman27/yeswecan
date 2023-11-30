@@ -4,7 +4,7 @@ from main import TextEmbedding
 app = Flask(__name__)
 
 spacy_model = "en_core_web_lg"
-courses_csv = "cs_courses_preprocessed.csv"
+courses_csv = "combined_courses_preprocessed.csv"
 # courses_csv = "combined_courses_preprocessed.csv"
 textEmbedding = TextEmbedding(spacy_model, courses_csv)
 
@@ -24,7 +24,7 @@ def process_data():
     # Send the processed data back as a response
     response = ''
     for ind in df.index:
-        response += df['Course Code'][ind] + ':  ' + df['title'][ind] + '\n'
+        response += df['Course Code'][ind] + ':  ' + df['Course Title'][ind] + '\n'
 
     return response
 

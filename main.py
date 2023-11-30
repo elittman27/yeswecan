@@ -1,10 +1,12 @@
 import spacy
 import pandas as pd
 import time
+import pickle
+import os
 from course_data.preprocessor import TextPreprocessor
 
 class TextEmbedding:
-    def __init__(self, spacy_model, courses_csv):
+    def __init__(self, spacy_model, courses_csv, load_embeddings=True, save_embeddings=True):
         self.nlp_model = spacy.load(spacy_model)
         self.courses_df = pd.read_csv(courses_csv)
         self.preprocessor = TextPreprocessor()
@@ -12,13 +14,26 @@ class TextEmbedding:
         self.desc_weight = .25
         self.courses_df["title"] = self.courses_df["Course Title Preprocessed"]
         self.courses_df["desc"] = self.courses_df["Description Preprocessed"]
+
+        
+        embeddings_file = 'courses_embeddings.pkl'
+
+
         t0 = time.time()
-        self.courses_df["nlp_title"] = self.courses_df["title"].apply(lambda title: self.nlp_model(str(title).lower()))
-        t1 = time.time()
-        print("Finished titles in: %.4f seconds" % (t1-t0))
-        self.courses_df["nlp_desc"] = self.courses_df["desc"].apply(lambda desc: self.nlp_model(str(desc).lower()))
-        t1 = time.time()
-        print("Finished setup in: %.4f seconds" % (t1-t0))
+        if load_embeddings and os.path.exists(embeddings_file):
+            with open(embeddings_file, 'rb') as f:
+                self.courses_df = pickle.load(f)
+            t1 = time.time()
+            print("Loaded embeddings from file in: %.4f seconds" % (t1-t0))
+        else:
+            self.courses_df["nlp_title"] = self.courses_df["title"].apply(lambda title: self.nlp_model(str(title).lower()))
+            self.courses_df["nlp_desc"] = self.courses_df["desc"].apply(lambda desc: self.nlp_model(str(desc).lower()))
+            t1 = time.time()
+            print("Finished setup in: %.4f seconds" % (t1-t0))
+
+            if save_embeddings:
+                with open(embeddings_file, 'wb') as f:
+                    pickle.dump(self.courses_df, f)
 
     def get_similar_course_titles(self, keyword, with_preprocessing=False):
         """ Given a keyword string, return the list of most relevant course titles"""
@@ -31,7 +46,7 @@ class TextEmbedding:
         print("Finding similarities to keyword string: " + keyword)
         print("Exact matches:")
         contains_keyword = self.courses_df[self.courses_df["title"].str.lower().fillna("").str.contains(keyword)]
-        print(contains_keyword[["Course Code", "title", "desc"]].head(10))
+        print(contains_keyword[["Course Code", "Course Title", "Description"]].head(10))
 
         print("---------------------------------------------------------------")
         # Find relevant matches using embedding
@@ -50,7 +65,7 @@ class TextEmbedding:
         return self.nlp_model(keyword1).similarity(self.nlp_model(keyword2))
 
 if __name__ == "__main__":
-    spacy_model = "en_core_web_md"
+    spacy_model = "en_core_web_lg"
     courses_csv = "combined_courses_preprocessed.csv"
     with_preprocessing = True
     textEmbedding = TextEmbedding(spacy_model, courses_csv)
