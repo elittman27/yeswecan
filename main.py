@@ -53,7 +53,7 @@ class TextEmbedding:
         copy_df["titleXkeyword"] = copy_df["nlp_title"].apply(lambda nlp_v: nlp_v.similarity(nlp_keyword))
         copy_df["titleXdesc"] = copy_df["nlp_desc"].apply(lambda nlp_v: nlp_v.similarity(nlp_keyword))
         copy_df["similarity"] = self.title_weight * copy_df["titleXkeyword"] + self.desc_weight * copy_df["titleXdesc"]
-        copy_df = copy_df.sort_values(by="similarity", ascending=False).head(10)
+        copy_df = copy_df.sort_values(by="similarity", ascending=False).head(25)
         
         courses_list = copy_df.to_dict(orient='records')
         formatted_courses = []

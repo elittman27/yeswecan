@@ -52,6 +52,7 @@ input[type="text"] {
 table {
     width: 80%;
     margin: 20px auto;
+    margin-bottom: 150px;
     border-collapse: collapse;
 }
 
