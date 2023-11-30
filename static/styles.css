@@ -1,9 +1,8 @@
-/* UC Berkeley-themed button styles */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f3f3f3; /* UC Berkeley's official background color */
+    background-color: #f3f3f3;
 }
 
 form {
@@ -40,37 +39,37 @@ input[type="text"] {
     font-size: 16px;
     border: none;
     border-radius: 5px;
-    background-color: #f0c518; /* UC Berkeley's official blue color */
+    background-color: #f0c518;
     color: #003262;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
 #submitButton:hover {
-    background-color: #0056b3; /* UC Berkeley's hover blue color */
+    background-color: #0056b3;
 }
 
 table {
-    width: 80%; /* Set the width of the table */
-    margin: 20px auto; /* Center the table and add margin */
-    border-collapse: collapse; /* Remove space between table borders */
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
 }
 
 th, td {
-    border: 1px solid #ddd; /* Add a border to each cell */
-    padding: 8px; /* Add padding inside each cell */
-    text-align: left; /* Align text to the left */
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
 }
 
 th {
-    background-color: #f4f4f4; /* Set a background color for headers */
-    color: #333; /* Set text color for headers */
+    background-color: #f4f4f4;
+    color: #333;
 }
 
 tr:nth-child(even) {
-    background-color: #c8c8c8; /* Set a background color for even rows */
+    background-color: #c8c8c8;
 }
 
 tr:hover {
-    background-color: #f0c518; /* Add a hover effect for rows */
+    background-color: #f0c518;
 }

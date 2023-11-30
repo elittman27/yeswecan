@@ -15,9 +15,7 @@ class TextEmbedding:
         self.courses_df["title"] = self.courses_df["Course Title Preprocessed"]
         self.courses_df["desc"] = self.courses_df["Description Preprocessed"]
 
-        
         embeddings_file = 'courses_embeddings.pkl'
-
 
         t0 = time.time()
         if load_embeddings and os.path.exists(embeddings_file):
@@ -37,7 +35,6 @@ class TextEmbedding:
 
     def get_similar_course_titles(self, keyword, with_preprocessing=False):
         """ Given a keyword string, return the list of most relevant course titles"""
-        # Start by processing the input word
         if with_preprocessing:
             keyword = self.preprocessor.preprocess(keyword)
 
@@ -67,8 +64,6 @@ class TextEmbedding:
                 "similarity": course["similarity"]
             }
             formatted_courses.append(formatted_course)
-
-        print(formatted_courses)
         return formatted_courses
 
     def two_keyword_similarity(self, keyword1, keyword2):
@@ -79,13 +74,8 @@ if __name__ == "__main__":
     courses_csv = "cs_courses_preprocessed.csv"
     with_preprocessing = True
     load_embeddings = False
-    save_embeddings = False
-    textEmbedding = TextEmbedding(spacy_model, courses_csv, load_embeddings=load_embeddings, save_embeddings=save_embeddings)
+    textEmbedding = TextEmbedding(spacy_model, courses_csv, load_embeddings=load_embeddings)
 
     while True:
         keyword = input("Give me a keyword: ")
         textEmbedding.get_similar_course_titles(keyword, with_preprocessing)
-
-    # keywords = ["vision", "neural networks", "probability", "systems", "SQL"]
-    # for keyword in keywords:
-    #     textEmbedding.get_similar_course_titles(keyword)

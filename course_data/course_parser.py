@@ -5,17 +5,9 @@ import os
 import glob
 from preprocessor import TextPreprocessor
 
-# HOW TO USE:
-# 1. Go to https://guide.berkeley.edu/courses/
-# 2. Select the department you want to parse
-# 3. Copy HTML
-# 4. Paste HTML into a text file and save it in the raw_data folder
-# 5. Run the script
-
-
 def clean_text(text):
     text = text.replace(u'\xa0', u' ').replace(u'聽', ' ').replace(u'鈥', '')
-    text = re.sub(r'[^\x00-\x7F]+', ' ', text)  # Remove non-ASCII characters
+    text = re.sub(r'[^\x00-\x7F]+', ' ', text)
     return text.strip()
 
 def parse_courses_from_html(file_path):
@@ -25,7 +17,6 @@ def parse_courses_from_html(file_path):
     soup = BeautifulSoup(html_content, 'html.parser')
     courses = []
     for course_block in soup.find_all('div', class_='courseblock'):
-        # Extracting course code, title, and units
         course_code = course_block.find('span', class_='code').get_text(strip=True)
         course_title = course_block.find('span', class_='title').get_text(strip=True)
         course_units = course_block.find('span', class_='hours').get_text(strip=True)
@@ -56,9 +47,7 @@ def parse_courses_from_html(file_path):
 
 
 def generate_all_courses_csv():
-
-    # Specify the directory containing your files
-    directory_path = r'course_data/department_htmls'  # Use a raw string literal and forward slashes
+    directory_path = r'course_data/department_htmls'
 
     if not os.path.exists(directory_path):
         print(f"Directory does not exist: {directory_path}")
@@ -72,13 +61,11 @@ def generate_all_courses_csv():
         print("No files found in the directory.")
         exit()
 
-    # Parsing and combining course data from all files
     all_courses = pd.DataFrame()
     for path in file_paths:
         courses_df = parse_courses_from_html(path)
         all_courses = pd.concat([all_courses, courses_df], ignore_index=True)
 
-    # Export to CSV
     all_courses.to_csv('combined_courses.csv', index=False)
 
 def generate_processed_csv(input_csv_path, output_csv_path):
