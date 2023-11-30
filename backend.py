@@ -6,8 +6,7 @@ app = Flask(__name__)
 spacy_model = "en_core_web_lg"
 courses_csv = "combined_courses_preprocessed.csv"
 with_preprocessing = True
-load_embeddings = True
-textEmbedding = TextEmbedding(spacy_model, courses_csv, load_embeddings=load_embeddings)
+textEmbedding = TextEmbedding(spacy_model, courses_csv)
 
 
 @app.route('/')

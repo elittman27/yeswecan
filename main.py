@@ -42,19 +42,20 @@ class TextEmbedding:
         keyword = keyword.lower()
         print("Finding similarities to keyword string: " + keyword)
         print("Exact matches:")
-        contains_keyword = self.courses_df[self.courses_df["title"].str.lower().fillna("").str.contains(keyword)]
+        copy_df = self.courses_df.copy()
+        contains_keyword = copy_df[copy_df["title"].str.lower().fillna("").str.contains(keyword)]
         print(contains_keyword[["Course Code", "Course Title", "Description"]].head(10))
 
         print("---------------------------------------------------------------")
         # Find relevant matches using embedding
         print("Relevant matches: ")
         nlp_keyword = self.nlp_model(keyword)
-        self.courses_df["titleXkeyword"] = self.courses_df["nlp_title"].apply(lambda nlp_v: nlp_v.similarity(nlp_keyword))
-        self.courses_df["titleXdesc"] = self.courses_df["nlp_desc"].apply(lambda nlp_v: nlp_v.similarity(nlp_keyword))
-        self.courses_df["similarity"] = self.title_weight * self.courses_df["titleXkeyword"] + self.desc_weight * self.courses_df["titleXdesc"]
-        self.courses_df = self.courses_df.sort_values(by="similarity", ascending=False).head(10)
+        copy_df["titleXkeyword"] = copy_df["nlp_title"].apply(lambda nlp_v: nlp_v.similarity(nlp_keyword))
+        copy_df["titleXdesc"] = copy_df["nlp_desc"].apply(lambda nlp_v: nlp_v.similarity(nlp_keyword))
+        copy_df["similarity"] = self.title_weight * copy_df["titleXkeyword"] + self.desc_weight * copy_df["titleXdesc"]
+        copy_df = copy_df.sort_values(by="similarity", ascending=False).head(10)
         
-        courses_list = self.courses_df.to_dict(orient='records')
+        courses_list = copy_df.to_dict(orient='records')
         formatted_courses = []
         for course in courses_list:
             formatted_course = {
@@ -69,13 +70,13 @@ class TextEmbedding:
     def two_keyword_similarity(self, keyword1, keyword2):
         return self.nlp_model(keyword1).similarity(self.nlp_model(keyword2))
 
-if __name__ == "__main__":
-    spacy_model = "en_core_web_lg"
-    courses_csv = "cs_courses_preprocessed.csv"
-    with_preprocessing = True
-    load_embeddings = False
-    textEmbedding = TextEmbedding(spacy_model, courses_csv, load_embeddings=load_embeddings)
+# if __name__ == "__main__":
+#     spacy_model = "en_core_web_lg"
+#     courses_csv = "cs_courses_preprocessed.csv"
+#     with_preprocessing = True
+#     load_embeddings = False
+#     textEmbedding = TextEmbedding(spacy_model, courses_csv, load_embeddings=load_embeddings)
 
-    while True:
-        keyword = input("Give me a keyword: ")
-        textEmbedding.get_similar_course_titles(keyword, with_preprocessing)
+#     while True:
+#         keyword = input("Give me a keyword: ")
+#         textEmbedding.get_similar_course_titles(keyword, with_preprocessing)
